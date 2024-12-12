@@ -1,0 +1,38 @@
+name: Pantheon Archive Action
+description: Action to archive Pantheon Git remotes
+
+inputs:
+  upstream-repository:
+    required: true
+    description: Git clone URL (should look like git@example.com/repository.git)
+
+  ssh-key:
+    required: true
+    description: SSH private key to authenticate with the remote upstream
+
+  sync-branch:
+    required: true
+    description: Branch name to synchronize
+
+  keyscan-host:
+    required: false
+    description: Host name to scan for SSH keys
+
+  keyscan-port:
+    required: false
+    description: Port to scan for SSH keys. Used with keyscan-host
+
+runs:
+  using: composite
+
+  steps:
+    - name: Run sync script
+      shell: bash
+      run: bash src/sync.sh
+
+      env:
+        SSH_KEY: ${{ inputs.ssh-key }}
+        SYNC_BRANCH: ${{ inputs.sync-branch }}
+        KEYSCAN_HOST: ${{ inputs.keyscan-host }}
+        KEYSCAN_PORT: ${{ inputs.keyscan-port }}
+        UPSTREAM_REPOSITORY: ${{ inputs.upstream-repository }}

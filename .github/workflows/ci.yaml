@@ -1,0 +1,36 @@
+name: CI Test Flow
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  shellcheck:
+    name: Run Shellcheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: pollenjp/setup-shellcheck@v1
+        with:
+          version: latest
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Run shellcheck
+        run: shellcheck src/sync.sh
+
+  bats:
+    name: Run Bats test suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          push: false
+          load: true
+          tags: tests
+          cache-from: type=gha
+          cache-to: type=gha
+      - name: Run tests
+        run: docker run --rm -it tests
