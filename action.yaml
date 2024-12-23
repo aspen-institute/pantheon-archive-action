@@ -28,7 +28,7 @@ runs:
   steps:
     - name: Run sync script
       shell: bash
-      run: bash src/sync.sh
+      run: bash ${{ github.action_path }}/src/sync.sh
 
       env:
         SSH_KEY: ${{ inputs.ssh-key }}
