@@ -11,12 +11,27 @@
 
 This is an action designed to synchronize commits from an outside source (such as Pantheon) into a GitHub repository. It is intended to be used with the [schedule feature](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onschedule) of Actions to archive projects where developers primarily use other Git repositories as the primary development source but you would like to keep all code in GitHub.
 
+## Requirements
+
+You must give your job permissions to write to the repo:
+
+```yaml
+jobs:
+  my_job:
+    name: My Job Name
+    permissions:
+      contents: write
+```
+
+And you must run the `actions/checkout` step beforehand.
+
 ## Usage
 
 ```yaml
 - uses: aspen-institute/pantheon-archive-action@v1
   with:
-    # Repository to check out. Typically looks something like git@example.com:repository.git.
+    # Repository to check out. Typically looks something like ssh://git@example.com:repository.git.
+    # If you forget to preface with "ssh://" the port will default to 22
     upstream-repository: ''
 
     # Branch to synchronize. Pantheon's default is master, but any branch can be synced.
@@ -32,7 +47,7 @@ This is an action designed to synchronize commits from an outside source (such a
     keyscan-port: ''
 ```
 
-## Example
+## Full Example
 
 This example is a monthly archive of an example Pantheon site.
 
@@ -47,8 +62,11 @@ jobs:
   archive:
     name: Archive dev
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
+      - uses: actions/checkout@v4
       - uses: aspen-institute/pantheon-archive-action@v1
         with:
           ssh-key: ${{ secrets.SSH_KEY }}
@@ -58,5 +76,5 @@ jobs:
           keyscan-host: codeserver.dev.EXAMPLE.drush.in
           keyscan-port: '2222'
 
-          upstream-repository: codeserver.dev.EXAMPLE@codeserver.dev.EXAMPLE.drush.in:2222/~/repository.git
+          upstream-repository: ssh://codeserver.dev.EXAMPLE@codeserver.dev.EXAMPLE.drush.in:2222/~/repository.git
 ```
