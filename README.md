@@ -67,7 +67,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: aspen-institute/pantheon-archive-action@v1
+      - uses: aspen-institute/pantheon-archive-action@v1.0.3
         with:
           ssh-key: ${{ secrets.SSH_KEY }}
 
