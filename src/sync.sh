@@ -41,6 +41,11 @@ unset SSH_KEY
 # settings and it's easier than passing -C to every git command
 cd "$GITHUB_WORKSPACE"
 
+# Temp debugging
+pwd
+ls -la
+
+
 if test -n "$KEYSCAN_HOST"; then
   if test -n "$KEYSCAN_PORT"; then
     keyscan_args=(-p "$KEYSCAN_PORT" "$KEYSCAN_HOST")
