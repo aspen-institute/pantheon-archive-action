@@ -61,7 +61,7 @@ echo "Pulling remote commits into the workspace"
 git checkout -b "$SYNC_BRANCH" --track "upstream/$SYNC_BRANCH"
 
 echo "Pushing remote commits up to GitHub"
-if ! git push -u origin "$SYNC_BRANCH"; then
+if ! git push -u origin "$SYNC_BRANCH" --force; then
   {
     echo "# :exclamation: Error Summary"
     echo "A remote merge conflict was detected."
